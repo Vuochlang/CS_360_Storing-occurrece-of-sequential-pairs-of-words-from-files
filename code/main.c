@@ -1,13 +1,14 @@
 #include "all.h"
 
+extern int hashTableSize;
+
 int main (int argc, char ** argv) {
-	int topNumber = 0;
+	int topNumber = -1;
 	FILE *fp;
-//	char *temp;
-	char *first;
-	char *second;
-	char pair[120] = "";
-	char empty[] = "";
+	char *temp;
+	char first[120], second[120], combine[240];
+	bool isErrorOccur = false;
+	int wordPairCount = 0;
 
 	if (argc == 1) { // if user didn't given any  file to read
 		printPrompt();
@@ -24,36 +25,52 @@ int main (int argc, char ** argv) {
 			printf("entered count = %d\n", topNumber);
 			startIndex = 2;
 		}
+        HashTable* hashTable = hashInit();
 		for (int i = startIndex; i < argc; i++ ) {
 			fp = fopen(argv[i], "r");
 		   	if (fp == NULL) {
 				printf("Error: %s is not a valid textfile\n", argv[i]);
 				printPrompt();
-				return -1;
+				isErrorOccur = true;
+				break;
 			}
 			printf("successfully read %s\n", argv[i]);
 
-            HashTable *hashTable = hashInit(hashTableSize);
-
-			first = getNextWord(fp);
-			strncat(pair, first, strlen(first));
-			second = getNextWord(fp);
-			while (second != NULL) {
-				strncat(pair, " ", 1);
-				strncat(pair, second, strlen(second));
-				printf("here %s\n", pair);
-				printf("%s = %u\n", pair, hashIndex(pair));
-				pair[0] = '\0';
-				first = second;
-				strncat(pair, first, strlen(first));
-				second = getNextWord(fp);
-			}
-			puts("out");
-			fclose(fp);
-			hashFree(hashTable);
-		}	
+		   	temp = getNextWord(fp);
+		   	if (temp != NULL) {
+		   	    strcpy(first, temp);
+		   	    free(temp);
+		   	    temp = getNextWord(fp);
+		   	    while (temp != NULL) {
+                    strcpy(second, temp);
+                    free(temp);
+                    strcpy(combine, first);
+                    strncat(combine, " ", 1);
+                    strncat(combine, second, strlen(second));
+                    if (needResizeTable(wordPairCount)) {
+                        hashTable = resizeHashTable(hashTable);
+                        puts("resizing...");
+                    }
+                    int index = (int)hashIndex(combine);
+		   	        if (searchTable(hashTable[index], combine) == -1) { // new words
+                        ++wordPairCount;
+                        hashAdd(hashTable[index], combine);
+                    }
+                    strcpy(first, second);
+		   	        temp = getNextWord(fp);
+                }
+		   	    free(temp);
+		   	}
+		   	fclose(fp);
+		}
+		printf("word count = %d\n", wordPairCount);
+//		hashPrint(hashTable);
+		printWords(hashTable, topNumber);
+        hashFree(hashTable);
+		if (isErrorOccur) {
+		    return -1;
+		}
 	}
-	puts("hrer");
 	return 0;	
 }
 

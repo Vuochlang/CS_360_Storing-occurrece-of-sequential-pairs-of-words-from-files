@@ -5,21 +5,30 @@
 #include "getWord.h"
 #include "crc64.h"
 
-#define hashTableSize 100
+#define LIMIT 120
 
 struct container{
-    char *wordPair[DICT_MAX_WORD_LEN * 2];
-    unsigned int *occurrence;
+    char *wordPair;
+//    char *second;
+    int occurrence;
     struct container *next;
 };
 
 typedef struct container* HashTable;
 
-void printPrompt();
+void printPrompt ();
+void printWords (HashTable*, int);
+char* combineWord(char*, char*);
+bool needResizeTable (int);
 
-unsigned int hashIndex (char*);
+unsigned long long hashIndex (char*);
 HashTable* hashInit();
 void hashFree (HashTable*);
+void hashAdd (HashTable, char*);
+void hashPrint (HashTable*);
+int searchTable (HashTable, char* );
 
-HashTable listInit();
-void listFree(HashTable);
+HashTable* resizeHashTable(HashTable*);
+void replace(HashTable, HashTable);
+void connectOldToNew (HashTable, HashTable);
+
