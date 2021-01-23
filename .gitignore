@@ -54,3 +54,4 @@ dkms.conf
 *.txt
 .idea
 test.c
+wordpairs
