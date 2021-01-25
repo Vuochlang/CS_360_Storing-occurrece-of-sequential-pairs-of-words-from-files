@@ -5,30 +5,33 @@
 #include "getWord.h"
 #include "crc64.h"
 
-#define LIMIT 120
+#define LIMIT 20 // assume 20 is the max characters in a word
 
-struct container{
+struct container {
     char *wordPair;
-//    char *second;
     int occurrence;
     struct container *next;
 };
-
 typedef struct container* HashTable;
 
+typedef struct array {
+    char word[LIMIT];
+    int count;
+}ARRAY;
+
 void printPrompt ();
-void printWords (HashTable*, int);
-char* combineWord(char*, char*);
-bool needResizeTable (int);
+int sortWords (const void *, const void *);
 
 unsigned long long hashIndex (char*);
 HashTable* hashInit();
 void hashFree (HashTable*);
 void hashAdd (HashTable, char*);
-void hashPrint (HashTable*);
 int searchTable (HashTable, char* );
+//void hashPrint (HashTable*);
 
 HashTable* resizeHashTable(HashTable*);
-void replace(HashTable, HashTable);
+bool needResizeTable (int);
 void connectOldToNew (HashTable, HashTable);
 
+void arrayConnect (HashTable*, ARRAY*);
+void printArray (ARRAY*, int);
