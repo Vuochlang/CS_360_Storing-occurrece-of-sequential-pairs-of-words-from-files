@@ -47,20 +47,20 @@ int searchTable (HashTable start, char* combine) {
     return -1;
 }
 
-//void hashFree (HashTable* hashTable) {
-//    HashTable current, new;
-//    for (int i = 0; i < hashTableSize; i++) { //loop to go through each hashTable
-//        new = hashTable[i] -> next;
-//        while (new != NULL) {
-//            current = new;
-//            new = new -> next;
-//            free(current -> wordPair);
-//            free(current);
-//        }
-//        free(hashTable[i]);
-//    }
-//    free(hashTable);
-//}
+void hashFree (HashTable* hashTable) {
+    HashTable current, new;
+    for (int i = 0; i < hashTableSize; i++) { //loop to go through each hashTable
+        new = hashTable[i] -> next;
+        while (new != NULL) {
+            current = new;
+            new = new -> next;
+            free(current -> wordPair);
+            free(current);
+        }
+        free(hashTable[i]);
+    }
+    free(hashTable);
+}
 
 //void hashPrint (HashTable* hashTable) {
 //    HashTable temp;
