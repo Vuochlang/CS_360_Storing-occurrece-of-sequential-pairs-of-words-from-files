@@ -2,6 +2,12 @@
 
 extern int hashTableSize;
 
+/**
+ * @function    arrayConnect
+ * @brief       combine data that are stored in hashTable into array
+ * @param       table   a pointer to the HashTable
+ * @param       arr     a pointer to the Array
+ */
 void arrayConnect (HashTable* table, ARRAY* arr) {
     int index = 0;
     HashTable tableNode, temp;
@@ -20,6 +26,12 @@ void arrayConnect (HashTable* table, ARRAY* arr) {
     free(table);
 }
 
+/**
+ * @function    printArray
+ * @brief       print all word pairs and their occurrence counts
+ * @param       arr     a pointer to the Array
+ * @param       size    size of the Array
+ */
 void printArray(ARRAY* arr, int size) {
     for (int i = 0; i < size; i++) {
         printf("%10d %s\n", arr[i] . count, arr[i] . word);

@@ -2,6 +2,15 @@
 
 extern int hashTableSize;
 
+/**
+ * @mainpage
+ * @param       argc
+ * @param       argv
+ * @brief       read from arguments and check each arguments,
+ *              if text file name is given, check if it's a valid text file otherwise return -1
+ *              if <-count> is given, check if it's a valid number otherwise return -1
+ * @return      -1 when specified error occur, otherwise return 0
+ */
 int main (int argc, char ** argv) {
 	int topNumber = -1; // number of words to print
     int wordPairCount = 0; // total words paired
@@ -11,7 +20,6 @@ int main (int argc, char ** argv) {
 	char *temp;
 	char first[LIMIT], second[LIMIT], combine[LIMIT * 2];
 
-	char sign; // minus sign in front of <count>
 	bool isError = false;
 
 	if (argc == 1) { // if user didn't given any  file to read
@@ -20,46 +28,58 @@ int main (int argc, char ** argv) {
 	}
 	else {
 		int startIndex = 1;
-		if (argc > 2 && sscanf(argv[1], "%c%d", &sign, &topNumber) == 2) {
-		    if (sign != '-') { // when there's no minus sign in front of the count variable as expected
+		if (argc > 2 && sscanf(argv[1], "%d", &topNumber) == 1) {
+		    if (topNumber == 0) {
+                fprintf(stderr, "--------> Error: entered %d as count, program won't print anything\n", topNumber);
 		        printPrompt();
 		        return -1;
 		    }
+		    else if (topNumber > 0) {
+                fprintf(stderr, "--------> Error: entered <%d> instead of <-%d>\n", topNumber, topNumber);
+		        printPrompt();
+		        return -1;
+		    }
+		    else
+		        topNumber *= -1;
 		    startIndex = 2;
 		}
+
         HashTable* hashTable = hashInit();
 		for (int i = startIndex; i < argc; i++ ) {
             strcpy(fileName, argv[i]);
-            if (strstr(fileName, ".txt") == NULL) // user didn't include extension
+            if (strstr(fileName, ".txt") == NULL) // when user didn't include the file extension
                 strcat(fileName, ".txt");
 			fp = fopen(fileName, "r");
 		   	if (fp == NULL) {
-                fprintf(stderr,"=====Error: %s is not a valid textfile\n", argv[i]);
+                fprintf(stderr, "--------> Error: %s is not a valid textfile\n", argv[i]);
 				isError = true;
 				break;
 			}
 //			printf("successfully read %s\n", fileName);
 
 		   	temp = getNextWord(fp);
-		   	if (temp != NULL) {
+		   	if (temp != NULL) { // if the file is not empty
 		   	    strcpy(first, temp);
 		   	    free(temp);
 		   	    temp = getNextWord(fp);
-		   	    while (temp != NULL) {
+		   	    while (temp != NULL) { // keep reading from the file until reach the end of the file
                     strcpy(second, temp);
                     free(temp);
                     strncpy(combine, first, LIMIT);
                     strcat(combine, " ");
-                    strncat(combine, second, LIMIT);
-                    if (needResizeTable(wordPairCount)) { // resize the HashTable
+                    strncat(combine, second, LIMIT); // concatenate the first and second word
+
+                    if (needResizeTable(wordPairCount)) { // resize the HashTable and set the hashTable to the new table
                         hashTable = resizeHashTable(hashTable);
                     }
-                    int index = (int)hashIndex(combine);
-		   	        if (searchTable(hashTable[index], combine) == -1) { // new words
+
+                    int index = (int)hashIndex(combine); // hashing the word_pair to get the index
+
+		   	        if (searchTable(hashTable[index], combine) == -1) { // when the word_pair is a new word
                         ++wordPairCount;
                         hashAdd(hashTable[index], combine);
                     }
-                    strncpy(first, second, LIMIT);
+                    strncpy(first, second, LIMIT); // second word becomes the first word for the next word_pair
 		   	        temp = getNextWord(fp);
                 }
 		   	    free(temp);
@@ -68,12 +88,13 @@ int main (int argc, char ** argv) {
 		}
 //		printf("Words counter = %d\n", wordPairCount);
 //		hashPrint(hashTable);
+
         if (isError) { // if there is a error while reading the file, free the hashTable and leave
             hashFree(hashTable);
             return -1;
         }
 
-        if (topNumber == -1 || topNumber == 0) // if user didn't initialize or user entered 0
+        if (topNumber == -1) // if user didn't initialize a <-count> in the argument
             topNumber = wordPairCount;
 
         if (wordPairCount != 0) { // in case, if the given file is empty, skip the following steps
@@ -85,19 +106,29 @@ int main (int argc, char ** argv) {
         }
         else {
             hashFree(hashTable);
-            fprintf(stderr, "Warning, file is empty.\n"); // if the given file doesn't have any content
+            fprintf(stderr, "Warning, file is empty.\n"); // if the given file doesn't have any content, output a warning
         }
 	}
 	return 0;	
 }
 
+/**
+ * @function    printPrompt
+ * @brief       print the Usage of the code
+ */
 void printPrompt () {
-    fprintf(stderr,"\n=====Usage : wordpairs <-count> fileName1 <fileName2> <fileName3> ...\n");
-    fprintf(stderr,"=====count : the integer number of word pairs to print out\n");
-    fprintf(stderr,"=====fileNameN are pathnames from which to read words\n");
-    fprintf(stderr,"=====(tokens enclosed in angular brackets are optional)\n\n");
+    fprintf(stderr, "\n--------> Usage : wordpairs <-count> fileName1 <fileName2> <fileName3> ...\n");
+    fprintf(stderr, "--------> count : the integer number of word pairs to print out\n");
+    fprintf(stderr, "--------> fileNameN are pathnames from which to read words\n");
+    fprintf(stderr, "--------> (tokens enclosed in angular brackets are optional)\n\n");
 }
 
+/**
+ * @function    sortWords
+ * @param       ptr1
+ * @param       ptr2
+ * @return      0, 1,
+ */
 int sortWords (const void *ptr1, const void *ptr2) {
     const ARRAY *p1 = ptr1;
     const ARRAY *p2 = ptr2;
