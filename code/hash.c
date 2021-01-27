@@ -27,7 +27,6 @@ void hashAdd(HashTable sentinel, char* combine) {
         temp->next=NULL;
         sentinel->next=temp;
     }
-    temp -> wordPair = malloc(LIMIT * 2 * sizeof(char));
     strcpy(temp -> wordPair, combine);
     temp -> occurrence = 1;
 }
@@ -54,7 +53,7 @@ void hashFree (HashTable* hashTable) {
         while (new != NULL) {
             current = new;
             new = new -> next;
-            free(current -> wordPair);
+//            free(current -> wordPair);
             free(current);
         }
         free(hashTable[i]);
@@ -62,15 +61,15 @@ void hashFree (HashTable* hashTable) {
     free(hashTable);
 }
 
-//void hashPrint (HashTable* hashTable) {
-//    HashTable temp;
-//    char word[240];
-//    for (int i = 0; i < hashTableSize; i++) {
-//        temp = hashTable[i] -> next;
-//        while (temp != NULL) {
-//            strcpy(word, temp -> wordPair);
-//            printf("(%d) \t%10d %s\n", i, temp -> occurrence, word);
-//            temp = temp -> next;
-//        }
-//    }
-//}
+void hashPrint (HashTable* hashTable) {
+    HashTable temp;
+    char word[240];
+    for (int i = 0; i < hashTableSize; i++) {
+        temp = hashTable[i] -> next;
+        while (temp != NULL) {
+            strcpy(word, temp -> wordPair);
+            printf("(%d) \t%10d %s\n", i, temp -> occurrence, word);
+            temp = temp -> next;
+        }
+    }
+}

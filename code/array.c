@@ -12,7 +12,6 @@ void arrayConnect (HashTable* table, ARRAY* arr) {
             strcpy(arr[index] . word, tableNode -> wordPair);
             arr[index] . count = tableNode -> occurrence;
             ++index;
-            free(tableNode -> wordPair);
             free(tableNode);
             tableNode = temp;
         }
@@ -26,5 +25,3 @@ void printArray(ARRAY* arr, int size) {
         printf("%10d %s\n", arr[i] . count, arr[i] . word);
     }
 }
-
-

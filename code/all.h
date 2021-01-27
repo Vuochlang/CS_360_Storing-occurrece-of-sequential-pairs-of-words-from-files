@@ -8,14 +8,14 @@
 #define LIMIT 20 // assume 20 is the max characters in a word
 
 struct container {
-    char *wordPair;
+    char wordPair[LIMIT*2];
     int occurrence;
     struct container *next;
 };
 typedef struct container* HashTable;
 
 typedef struct array {
-    char word[LIMIT];
+    char word[LIMIT*2];
     int count;
 }ARRAY;
 

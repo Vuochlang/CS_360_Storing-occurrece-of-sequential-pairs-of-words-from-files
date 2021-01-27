@@ -7,7 +7,7 @@ int main (int argc, char ** argv) {
     int wordPairCount = 0; // total words paired
 
 	FILE *fp;
-	char fileName[20];
+	char fileName[100];
 	char *temp;
 	char first[LIMIT], second[LIMIT], combine[LIMIT * 2];
 
@@ -48,9 +48,9 @@ int main (int argc, char ** argv) {
 		   	    while (temp != NULL) {
                     strcpy(second, temp);
                     free(temp);
-                    strcpy(combine, first);
+                    strncpy(combine, first, LIMIT);
                     strcat(combine, " ");
-                    strncat(combine, second, strlen(second));
+                    strncat(combine, second, LIMIT);
                     if (needResizeTable(wordPairCount)) { // resize the HashTable
                         hashTable = resizeHashTable(hashTable);
                     }
@@ -59,7 +59,7 @@ int main (int argc, char ** argv) {
                         ++wordPairCount;
                         hashAdd(hashTable[index], combine);
                     }
-                    strcpy(first, second);
+                    strncpy(first, second, LIMIT);
 		   	        temp = getNextWord(fp);
                 }
 		   	    free(temp);
@@ -77,10 +77,11 @@ int main (int argc, char ** argv) {
             topNumber = wordPairCount;
 
         if (wordPairCount != 0) { // in case, if the given file is empty, skip the following steps
-            ARRAY arr[wordPairCount];
+            ARRAY* arr = malloc(wordPairCount * sizeof(struct array));
             arrayConnect(hashTable, arr);
             qsort(arr, wordPairCount, sizeof(struct array), sortWords);
             printArray(arr, topNumber);
+            free(arr);
         }
         else {
             hashFree(hashTable);
