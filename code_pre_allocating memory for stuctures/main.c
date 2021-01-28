@@ -1,4 +1,7 @@
-#include "all.h"
+// Vuochlang Chang
+// 01/27/2021
+
+#include "headers.h"
 
 extern int hashTableSize;
 
@@ -22,6 +25,9 @@ int main (int argc, char ** argv) {
 
 	bool isError = false;
 
+    HashTable* hashTable;
+    ARRAY* arr;
+
 	if (argc == 1) { // if user didn't given any  file to read
 		printPrompt();
 		return -1;
@@ -44,7 +50,7 @@ int main (int argc, char ** argv) {
 		    startIndex = 2;
 		}
 
-        HashTable* hashTable = hashInit();
+        hashTable = hashInit();
 		for (int i = startIndex; i < argc; i++ ) {
             strcpy(fileName, argv[i]);
             if (strstr(fileName, ".txt") == NULL) // when user didn't include the file extension
@@ -69,14 +75,16 @@ int main (int argc, char ** argv) {
                     strcat(combine, " ");
                     strncat(combine, second, LIMIT); // concatenate the first and second word
 
-                    if (needResizeTable(wordPairCount)) { // resize the HashTable and set the hashTable to the new table
-                        hashTable = resizeHashTable(hashTable);
-                    }
-
                     int index = (int)hashIndex(combine); // hashing the word_pair to get the index
 
-		   	        if (searchTable(hashTable[index], combine) == -1) { // when the word_pair is a new word
-                        ++wordPairCount;
+                    int searchResult = searchTable(hashTable[index], combine);
+		   	        if (searchResult > -1) { // when the word_pair is a new word
+		   	            if (searchResult == 5) { // meet the max collision then resize hash table
+                            hashTableSize *= 5;
+                            hashTable = resizeHashTable(hashTable);
+                            index = (int)hashIndex(combine); // get new index in new table
+                        }
+		   	            ++wordPairCount;
                         hashAdd(hashTable[index], combine);
                     }
                     strncpy(first, second, LIMIT); // second word becomes the first word for the next word_pair
@@ -86,7 +94,7 @@ int main (int argc, char ** argv) {
 		   	}
 		   	fclose(fp);
 		}
-//		printf("Words counter = %d\n", wordPairCount);
+//		printf("Word counter = %d\n", wordPairCount);
 //		hashPrint(hashTable);
 
         if (isError) { // if there is a error while reading the file, free the hashTable and leave
@@ -98,7 +106,7 @@ int main (int argc, char ** argv) {
             topNumber = wordPairCount;
 
         if (wordPairCount != 0) { // in case, if the given file is empty, skip the following steps
-            ARRAY* arr = malloc(wordPairCount * sizeof(struct array));
+            arr = malloc(wordPairCount * sizeof(struct array));
             arrayConnect(hashTable, arr);
             qsort(arr, wordPairCount, sizeof(struct array), sortWords);
             printArray(arr, topNumber);

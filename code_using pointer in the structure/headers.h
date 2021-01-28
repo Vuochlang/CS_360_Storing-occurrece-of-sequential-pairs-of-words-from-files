@@ -1,5 +1,5 @@
 /**
- * @header  all.h
+ * @header  headers.h
  * @brief   a collection that contains all declaration for functions, struct(s) and include all headers that will
  *          be used in all .c files
  */
@@ -8,6 +8,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
+
 #include "getWord.h"
 #include "crc64.h"
 
@@ -21,7 +22,7 @@
  * @brief   will be using this struct to create hashTable and linkedlist
  */
 struct container {
-    char wordPair[LIMIT*2];
+    char *wordPair;
     int occurrence;
     struct container *next;
 };
@@ -34,7 +35,7 @@ typedef struct container* HashTable;
  * @discussion  use this struct to combine and store all information from the hashTable
  */
 typedef struct array {
-    char word[LIMIT*2];
+    char *word;
     int count;
 }ARRAY;
 
@@ -52,9 +53,9 @@ void hashPrint (HashTable*);
 
 // in resizeHash.c
 HashTable* resizeHashTable(HashTable*);
-bool needResizeTable (int);
 void connectOldToNew (HashTable, HashTable);
 
 // in array.c
 void arrayConnect (HashTable*, ARRAY*);
 void printArray (ARRAY*, int);
+void freeArray(ARRAY*, int);

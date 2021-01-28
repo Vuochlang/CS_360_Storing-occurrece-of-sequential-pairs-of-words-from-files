@@ -1,4 +1,4 @@
-#include "all.h"
+#include "headers.h"
 
 extern int hashTableSize;
 
@@ -15,9 +15,11 @@ void arrayConnect (HashTable* table, ARRAY* arr) {
         tableNode = table[i] -> next;
         while (tableNode != NULL) {
             temp = tableNode -> next;
+            arr[index] . word = (char*)malloc(strlen(tableNode -> wordPair)*sizeof(tableNode -> wordPair));
             strcpy(arr[index] . word, tableNode -> wordPair);
             arr[index] . count = tableNode -> occurrence;
             ++index;
+            free(tableNode -> wordPair);
             free(tableNode);
             tableNode = temp;
         }
@@ -36,4 +38,17 @@ void printArray(ARRAY* arr, int size) {
     for (int i = 0; i < size; i++) {
         printf("%10d %s\n", arr[i] . count, arr[i] . word);
     }
+}
+
+/**
+ * @function    freeArray
+ * @brief       free all allocated memory for the arr
+ * @param       arr     a pointer to the struct Array
+ * @param       size    size of the Array
+ */
+void freeArray(ARRAY* arr, int size) {
+    for (int i  = 0; i < size; i++) {
+        free(arr[i] . word);
+    }
+    free(arr);
 }

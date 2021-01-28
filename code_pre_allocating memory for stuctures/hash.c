@@ -1,4 +1,4 @@
-#include "all.h"
+#include "headers.h"
 
 int hashTableSize = 10; // a global variable
 
@@ -53,21 +53,23 @@ void hashAdd(HashTable sentinel, char* combine) {
  * @brief       loop through the hashTable start and compare if the given combine already exist
  * @param       start   a pointer to a specific hashTable entry
  * @param       combine a pointer to the word_pair that read from the file
- * @return      0 when the word_pair already exist, otherwise return -1
+ * @return      0 when the word_pair already exist, otherwise return the depth of the given hashTable
  */
 int searchTable (HashTable start, char* combine) {
     HashTable current = start;
     HashTable new = start -> next;
+    int depth = 0;
 
     while (new != NULL) {
+        depth += 1;
         current = new;
         if (strcmp(current -> wordPair, combine) == 0) { // when the word_pair already exist, just increment the count
             current -> occurrence += 1;
-            return 0;
+            return -1;
         }
         new = new -> next;
     }
-    return -1;
+    return depth; // count is the depth of the hashTable
 }
 
 /**
