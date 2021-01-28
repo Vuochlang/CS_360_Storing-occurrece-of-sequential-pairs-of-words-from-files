@@ -1,6 +1,7 @@
 # CS 360 - Systems Programming
 
-<h1> Assignment 1: Storing-occurrece-of-sequential-pairs-of-words-from-files </h1>
+<h1> Assignment 1:  </h1>
+<p> Storing-occurrece-of-sequential-pairs-of-words-from-files </p>
 
 01/28/2021
 
@@ -12,9 +13,11 @@ occurrence."</p>
 
 <h3> Program Interface (Required) </h3>
 
-<p>wordpairs <-count> fileName1 <fileName2> <fileName3> ...</p>
-<p>Where: 
-    <ul>_count is the integer number of word pairs to print out 
-    <ul>_ fileNameN are pathnames from which to read words 
-    <ul>_ If no count argument is specified, ALL words pairs are printed to stdout
-    <ul>_ (tokens enclosed in angular brackets are optional).
+<h4>wordpairs <-count> fileName1 <fileName2> <fileName3> ...</h4>
+Where: 
+<ul>
+    <li>count is the integer number of word pairs to print out</li>
+    <li>fileNameN are pathnames from which to read words</li> 
+    <li>If no count argument is specified, ALL words pairs are printed to stdout</li>
+    <li>(tokens enclosed in angular brackets are optional).</li>
+</ul>
