@@ -13,7 +13,8 @@ occurrence."</p>
 
 <h3> Program Interface (Required) </h3>
 
-<h4>wordpairs <-count> fileName1 <fileName2> <fileName3> ...</h4>
+wordpairs <-count> fileName1 <fileName2> <fileName3> ...
+    
 Where: 
 <ul>
     <li>count is the integer number of word pairs to print out</li>
