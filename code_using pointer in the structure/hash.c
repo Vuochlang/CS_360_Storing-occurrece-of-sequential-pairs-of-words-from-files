@@ -44,11 +44,8 @@ void hashAdd(HashTable sentinel, char* combine) {
         temp->next=NULL;
         sentinel->next=temp;
     }
-//    temp -> wordPair = malloc(strlen(combine));
-//    strncpy(temp -> wordPair, combine, strlen(combine));
     temp -> wordPair = (char *)malloc(strlen(combine)*sizeof(combine));
     strcpy(temp -> wordPair, combine);
-//    printf("%lu %s\n", sizeof(combine), temp -> wordPair);
     temp -> occurrence = 1;
 }
 
