@@ -135,7 +135,6 @@ void printPrompt () {
  * @function    sortWords
  * @param       ptr1
  * @param       ptr2
- * @return      0, 1,
  */
 int sortWords (const void *ptr1, const void *ptr2) {
     const ARRAY *p1 = ptr1;
