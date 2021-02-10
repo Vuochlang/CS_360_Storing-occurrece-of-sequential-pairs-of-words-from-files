@@ -16,7 +16,7 @@ HashTable* resizeHashTable (HashTable *oldTable) {
     HashTable current, temp;
     int index;
 
-    printf("resizing to %d....\n", hashTableSize);
+//    printf("resizing to %d....\n", hashTableSize);
     for (int i = 0; i < (hashTableSize / 5); i++) {
         current = oldTable[i] -> next;
         while (current != NULL) {
